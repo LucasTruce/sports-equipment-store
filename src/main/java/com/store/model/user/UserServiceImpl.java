@@ -1,34 +1,32 @@
 package com.store.model.user;
 
-import com.store.model.utils.Converter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements UserService, Converter<User, UserDto> {
+public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
+    private final UserConverter userConverter;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
+        userConverter = new UserConverter();
     }
 
     @Override
     public UserDto saveUser(UserDto userDto) {
-        User user = dtoToEntity(userDto, User.class);
-        return entityToDto(userRepository.save(user), UserDto.class);
+        User user = userConverter.dtoToEntity(userDto);
+        return userConverter.entityToDto(userRepository.save(user));
     }
 
     @Override
     public List<UserDto> getUsers() {
        List<User> users = userRepository.findAll();
-        return users.stream()
-                .map(user -> entityToDto(user, UserDto.class))
-                .collect(Collectors.toList());
+        return userConverter.convertAllToDto(users);
     }
 
 }

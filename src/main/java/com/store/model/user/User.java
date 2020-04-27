@@ -2,6 +2,7 @@ package com.store.model.user;
 
 import lombok.Data;
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Data
@@ -14,9 +15,11 @@ public class User {
     private Long id;
 
     @Column(name = "username")
+    @NotBlank
     private String username;
 
     @Column(name = "password")
+    @NotBlank
     private String password;
 
 }

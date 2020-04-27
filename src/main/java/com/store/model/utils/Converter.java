@@ -1,15 +1,16 @@
 package com.store.model.utils;
 
-import org.modelmapper.ModelMapper;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public interface Converter<T, S> {
 
-    default S entityToDto(T source, Class<S> dtoClass){
-        return new ModelMapper().map(source, dtoClass);
-    }
+    S entityToDto(T source);
+    T dtoToEntity(S destination);
 
-    default T dtoToEntity(S source, Class<T> entityClass){
-        return new ModelMapper().map(source, entityClass);
+    default List<S> convertAllToDto(List<T> entityObjects){
+        return entityObjects.stream()
+                        .map(this::entityToDto)
+                        .collect(Collectors.toList());
     }
-
 }
