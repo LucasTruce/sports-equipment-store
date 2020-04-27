@@ -1,10 +1,10 @@
 package com.store.model.user;
 
-import com.store.model.utils.Converter;
+import java.util.List;
+import java.util.stream.Collectors;
 
-public class UserConverter implements Converter<User, UserDto> {
+public class UserConverter {
 
-    @Override
     public UserDto entityToDto(User user) {
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
@@ -13,12 +13,17 @@ public class UserConverter implements Converter<User, UserDto> {
         return userDto;
     }
 
-    @Override
     public User dtoToEntity(UserDto userDto) {
         User user = new User();
         user.setId(userDto.getId());
         user.setUsername(userDto.getUsername());
         user.setPassword(userDto.getPassword());
         return user;
+    }
+
+    public List<UserDto> convertAllToDto(List<User> entityObjects){
+        return entityObjects.stream()
+                .map(this::entityToDto)
+                .collect(Collectors.toList());
     }
 }
