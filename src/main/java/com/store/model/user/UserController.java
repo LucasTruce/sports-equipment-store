@@ -1,6 +1,6 @@
 package com.store.model.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,14 +9,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
+@CrossOrigin
 public class UserController {
 
     private final UserService userService;
 
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
 
     @GetMapping
     public ResponseEntity<List<UserDto>> getUsers(){
@@ -27,4 +25,5 @@ public class UserController {
     public ResponseEntity<UserDto> saveUser(@RequestBody UserDto userDto){
         return new ResponseEntity<>(userService.saveUser(userDto), HttpStatus.OK);
     }
+
 }
