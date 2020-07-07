@@ -1,9 +1,6 @@
 package com.store.security.jwt;
 
-import com.store.model.user.User;
-import com.store.model.user.UserDto;
-import com.store.model.user.UserRepository;
-import com.store.model.user.UserService;
+import com.store.model.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,10 +32,10 @@ public class AuthController {
     UserService userService;
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody UserDto userDto) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody UserLoginDto userLoginDto) {
 
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(userDto.getUsername(), userDto.getPassword()));
+                new UsernamePasswordAuthenticationToken(userLoginDto.getUsername(), userLoginDto.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
@@ -56,11 +53,11 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody UserDto userDto) {
-        if(userRepository.existsByUsername(userDto.getUsername())){
+    public ResponseEntity<?> registerUser(@Valid @RequestBody UserLoginDto userLoginDto) {
+        if(userRepository.existsByUsername(userLoginDto.getUsername())){
             throw new UsernameNotFoundException("Error: Username is already taken!");
         }
-        return new ResponseEntity<>(userService.saveUser(userDto), HttpStatus.OK);
+        return new ResponseEntity<>(userService.saveUser(userLoginDto), HttpStatus.OK);
 
 
     }

@@ -1,26 +1,32 @@
 package com.store.model.product;
 
+import com.store.model.productCategory.ProductCategoryConverter;
+
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class ProductConverter {
 
-    public ProductDto entityToDto(Product product) {
-        ProductDto productDto = new ProductDto();
-        productDto.setId(product.getId());
-        productDto.setName(product.getName());
-        productDto.setDescription(product.getDescription());
-        productDto.setUnitPrice(product.getUnitPrice());
-        productDto.setImageUrl(product.getImageUrl());
-        productDto.setActive(product.isActive());
-        productDto.setUnitsInStock(product.getUnitsInStock());
-        productDto.setDateCreated(product.getDateCreated());
-        productDto.setLastUpdated(product.getLastUpdated());
-        productDto.setCategory(product.getCategory());
-        return productDto;
+    public ProductDto map(Product product) {
+
+        ProductCategoryConverter categoryConverter = new ProductCategoryConverter();
+
+        return new ProductDto(
+                product.getId(),
+                product.getName(),
+                product.getDescription(),
+                product.getUnitPrice(),
+                product.getImageUrl(),
+                product.isActive(),
+                product.getUnitsInStock(),
+                categoryConverter.map(product.getCategory())
+        );
     }
 
-    public Product dtoToEntity(ProductDto productDto) {
+    public Product map(ProductDto productDto) {
+        ProductCategoryConverter categoryConverter = new ProductCategoryConverter();
+
         Product product = new Product();
         product.setId(productDto.getId());
         product.setName(productDto.getName());
@@ -29,15 +35,20 @@ public class ProductConverter {
         product.setImageUrl(productDto.getImageUrl());
         product.setActive(productDto.isActive());
         product.setUnitsInStock(productDto.getUnitsInStock());
-        product.setDateCreated(productDto.getDateCreated());
-        product.setLastUpdated(productDto.getLastUpdated());
-        product.setCategory(productDto.getCategory());
+        product.setCategory(categoryConverter.map(productDto.getCategory()));
         return product;
     }
 
-    public List<ProductDto> convertAllToDto(List<Product> entityObjects){
+    public List<ProductDto> map(List<Product> entityObjects){
         return entityObjects.stream()
-                .map(this::entityToDto)
+                .map(this::map)
                 .collect(Collectors.toList());
     }
+
+    public List<Product> map(Collection<ProductDto> entityObjects){
+        return entityObjects.stream()
+                .map(this::map)
+                .collect(Collectors.toList());
+    }
+
 }

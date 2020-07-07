@@ -15,15 +15,14 @@ public class UserController {
 
     private final UserService userService;
 
-
     @GetMapping
-    public ResponseEntity<List<UserDto>> getUsers(){
+    public ResponseEntity<List<UserIdentificationDto>> getUsers(){
         return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> saveUser(@RequestBody UserDto userDto){
-        return new ResponseEntity<>(userService.saveUser(userDto), HttpStatus.OK);
+    public ResponseEntity<UserIdentificationDto> saveUser(@RequestBody UserLoginDto userLoginDto){
+        return new ResponseEntity<>(userService.saveUser(userLoginDto), HttpStatus.OK);
     }
 
 }

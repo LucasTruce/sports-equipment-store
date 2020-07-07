@@ -1,11 +1,11 @@
 package com.store.model.productCategory;
 
 import lombok.Getter;
-import lombok.Setter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@Setter
+@RequiredArgsConstructor
 public class ProductCategoryDto {
-    private Long id;
-    private String name;
+    private final Long id;
+    private final String name;
 }

@@ -1,12 +1,10 @@
 package com.store.model.product;
 
-import com.store.model.user.UserConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,8 +37,8 @@ public class ProductController {
         return new ResponseEntity<>(productService.saveProduct(productDto), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/imageUpload")
-    public ResponseEntity<Map<String,String>> uploadImage(@RequestParam("image") MultipartFile file) throws IOException {
+    @PostMapping(value = "/imageUpload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<ImageUrlDto> uploadImage(@RequestPart("image") MultipartFile file) throws IOException {
         return new ResponseEntity<>(productService.uploadImage(file), HttpStatus.OK);
 
     }

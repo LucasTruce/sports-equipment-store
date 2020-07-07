@@ -1,6 +1,9 @@
 package com.store.model.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.store.model.order.Order;
 import com.store.model.role.Role;
+
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -35,19 +38,26 @@ public class User implements UserDetails {
     private boolean enabled;
 
     @Column(name = "account_locked")
-    private boolean accountNonLocked;
+    private boolean accountLocked;
 
     @Column(name = "account_expired")
-    private boolean accountNonExpired;
+    private boolean accountExpired;
 
     @Column(name = "credentials_expired")
-    private boolean credentialsNonExpired;
+    private boolean credentialsExpired;
+
+
+    //connections
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", schema = "storedb", joinColumns = {
             @JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {
             @JoinColumn(name = "role_id", referencedColumnName = "id") })
     private List<Role> roles;
+
+
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    private List<Order> orderList = new ArrayList<>();
 
     //Methods
     @Override
@@ -57,17 +67,17 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return !accountNonExpired;
+        return !accountExpired;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return !accountNonLocked;
+        return !accountLocked;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return !credentialsNonExpired;
+        return !credentialsExpired;
     }
 
     @Override

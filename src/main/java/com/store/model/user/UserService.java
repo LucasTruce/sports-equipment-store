@@ -25,16 +25,18 @@ public class UserService {
         this.roleRepository = roleRepository;
     }
 
-    public UserDto saveUser(UserDto userDto) {
-        User user = userConverter.dtoToEntity(userDto);
+    public UserIdentificationDto saveUser(UserLoginDto userLoginDto) {
+        User user = userConverter.map(userLoginDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         user.setRoles(Collections.singletonList(roleRepository.getOne(2L)));
         user.setEnabled(true);
-        return userConverter.entityToDto(userRepository.save(user));
+
+        return userConverter.map(userRepository.save(user));
     }
 
-    public List<UserDto> getUsers() {
-        return userConverter.convertAllToDto(userRepository.findAll());
+    public List<UserIdentificationDto> getUsers() {
+        return userConverter.map(userRepository.findAll());
     }
 
 

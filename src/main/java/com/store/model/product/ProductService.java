@@ -23,7 +23,7 @@ public class ProductService {
 
     public List<ProductDto> getProducts(){
         List<Product> products = productRepository.findAll();
-        return productConverter.convertAllToDto(products);
+        return productConverter.map(products);
     }
 
     public Optional<Product> findById(Long id){
@@ -31,23 +31,22 @@ public class ProductService {
     }
 
     public ProductDto saveProduct(ProductDto productDto){
-        return productConverter.entityToDto(productRepository.save(productConverter.dtoToEntity(productDto)));
+        return productConverter.map(productRepository.save(productConverter.map(productDto)));
     }
 
-    public Map<String, String> uploadImage(MultipartFile file) throws IOException {
+    public ImageUrlDto uploadImage(MultipartFile file) throws IOException {
         Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
                 "cloud_name", "verdoux",
                 "api_key", "677878282762623",
                 "api_secret", "qbzuQ9ZE19e8w4y1RDuFzXOMqOI"));
 
-        Map upload = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
-        Map<String, String> jsonMap = new HashMap<>();
-        jsonMap.put("content", upload.get("url").toString());
-        return jsonMap;
+        String url = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url").toString();
+
+        return new ImageUrlDto(url);
     }
 
     public ProductDto entityToDto(Product product){
-        return productConverter.entityToDto(product);
+        return productConverter.map(product);
 
     }
 

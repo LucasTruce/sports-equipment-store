@@ -1,24 +1,20 @@
 package com.store.model.product;
 
-import com.store.model.productCategory.ProductCategory;
-
+import com.store.model.productCategory.ProductCategoryDto;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.RequiredArgsConstructor;
 import java.math.BigDecimal;
-import java.util.Date;
 
 @Getter
-@Setter
+@RequiredArgsConstructor
 public class ProductDto {
 
-    private Long id;
-    private String name;
-    private String description;
-    private BigDecimal unitPrice;
-    private String imageUrl;
-    private boolean active;
-    private int unitsInStock;
-    private Date dateCreated;
-    private Date lastUpdated;
-    private ProductCategory category;
+    private final Long id;
+    private final String name;
+    private final String description;
+    private final BigDecimal unitPrice;
+    private final String imageUrl;
+    private final boolean active;
+    private final int unitsInStock;
+    private final ProductCategoryDto category;
 }

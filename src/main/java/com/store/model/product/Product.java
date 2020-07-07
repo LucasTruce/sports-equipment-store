@@ -1,5 +1,7 @@
 package com.store.model.product;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.store.model.order.Order;
 import com.store.model.productCategory.ProductCategory;
 
 import lombok.Getter;
@@ -10,6 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "product", schema = "storedb")
@@ -41,7 +44,7 @@ public class Product {
 
     @Column(name = "date_created")
     @CreationTimestamp
-    private Date dateCreated;
+    private Date dateCreated;   //change to LocalDateTime
 
     @Column(name = "last_updated")
     @UpdateTimestamp
@@ -50,4 +53,7 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private ProductCategory category;
+
+    @ManyToMany(mappedBy = "productList")
+    private List<Order> orderList;
 }

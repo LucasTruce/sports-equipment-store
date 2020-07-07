@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -52,6 +53,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         	http.cors().and().csrf().disable()
                     .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -61,6 +63,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.GET, "/products", "/products/{id}").permitAll()
                     .antMatchers(HttpMethod.POST, "/products", "/products/imageUpload").permitAll()   //change to ADMIN, WORKER
                     .antMatchers(HttpMethod.GET, "/productCategory").permitAll()
+                    .antMatchers(HttpMethod.POST, "/orders").permitAll()
+                    .antMatchers(HttpMethod.GET, "/orders").permitAll()
                     .anyRequest().authenticated();
 
             http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

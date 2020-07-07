@@ -17,7 +17,7 @@ public class ProductCategoryService {
     }
 
     public List<ProductCategoryDto> getCategories(){
-        return productCategoryConverter.convertAllToDto(productCategoryRep.findAll());
+        return productCategoryConverter.map(productCategoryRep.findAll());
 
     }
 }
